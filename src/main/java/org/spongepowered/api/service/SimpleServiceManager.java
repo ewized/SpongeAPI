@@ -31,6 +31,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.SpongeEventFactory;
 import org.spongepowered.api.event.cause.Cause;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
@@ -68,6 +69,20 @@ public class SimpleServiceManager implements ServiceManager {
         checkNotNull(service, "service");
         @Nullable ProviderRegistration<T> provider = (ProviderRegistration<T>) this.providers.get(service);
         return provider != null ? Optional.of(provider.getProvider()) : Optional.empty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> Optional<T> provideFirst(Class<T> service) {
+        checkNotNull(service, "service");
+        for (Map.Entry<Class<?>, ProviderRegistration<?>> entry : this.providers.entrySet()) {
+            Class<?> s = entry.getKey();
+            ProviderRegistration<?> provider = entry.getValue();
+            if (s.isAssignableFrom(service)) {
+                return Optional.of((T) provider.getProvider());
+            }
+        }
+        return Optional.empty();
     }
 
     @SuppressWarnings("unchecked")

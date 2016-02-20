@@ -72,6 +72,15 @@ public interface ServiceManager {
     <T> Optional<T> provide(Class<T> service);
 
     /**
+     * Returns the first provider that is derived from the specified service.
+     *
+     * @param service The service
+     * @param <T> The type of service
+     * @return A provider, if available
+     */
+    <T> Optional<T> provideFirst(Class<T> service);
+
+    /**
      * Gets the {@link ProviderRegistration} for the given service, if available.
      *
      * @param service The service
