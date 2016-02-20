@@ -24,8 +24,6 @@
  */
 package org.spongepowered.api.service;
 
-import org.spongepowered.api.plugin.PluginContainer;
-
 /**
  * Represents the registration information for the provider of a service.
  */
@@ -44,12 +42,5 @@ public interface ProviderRegistration<T> {
      * @return The provider
      */
     T getProvider();
-
-    /**
-     * Gets the {@link PluginContainer} that registered the provider of this
-     * provider registration.
-     * @return
-     */
-    PluginContainer getPlugin();
 
 }

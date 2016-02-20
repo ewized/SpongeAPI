@@ -26,6 +26,7 @@ package org.spongepowered.api.plugin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.api.service.ServiceManager;
 
 import java.util.Optional;
 
@@ -71,5 +72,12 @@ public interface PluginContainer {
      * @return The instance if available
      */
     Optional<Object> getInstance();
+
+    /**
+     * Returns the plugin's internal service manager.
+     *
+     * @return Internal service manager
+     */
+    ServiceManager getServiceManager();
 
 }
