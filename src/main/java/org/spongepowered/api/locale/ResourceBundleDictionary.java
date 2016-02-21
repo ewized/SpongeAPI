@@ -57,6 +57,7 @@ public interface ResourceBundleDictionary<B extends ResourceBundle> extends Dict
     default Optional<String> get(String key, Locale locale) {
         checkNotNull(key, "key");
         checkNotNull(locale, "locale");
-        return Optional.of(getBundle(locale).getString(key));
+        String value = getBundle(locale).getString(key);
+        return Optional.ofNullable(value.equals("null") ? null : value);
     }
 }
