@@ -22,34 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.service;
-
-import org.spongepowered.api.event.cause.Cause;
+package org.spongepowered.api.plugin;
 
 /**
- * Represents the registration information for the provider of a service.
+ * Exception thrown when a plugin cannot be found.
  */
-public interface ProviderRegistration<T> {
+public class PluginNotFoundException extends RuntimeException {
 
     /**
-     * Gets the service of this provider registration.
+     * Creates a new exception for the specified instance that was searched for.
      *
-     * @return The service
+     * @param instance Plugin instance searched for
      */
-    Class<T> getService();
-
-    /**
-     * Gets the service provider of this provider regitration.
-     *
-     * @return The provider
-     */
-    T getProvider();
-
-    /**
-     * Returns the {@link Cause} of the registration.
-     *
-     * @return Cause of registration
-     */
-    Cause getCause();
+    public PluginNotFoundException(Object instance) {
+        super("Failed to retrieve plugin from instance of type " + instance.getClass() + ".");
+    }
 
 }

@@ -25,8 +25,6 @@
 package org.spongepowered.api.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -37,11 +35,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.EventManager;
+import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.plugin.PluginManager;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Sponge.class)
@@ -62,9 +60,9 @@ public class SimpleServiceManagerTest {
         PowerMockito.mockStatic(Sponge.class);
         PowerMockito.when(Sponge.getEventManager()).thenReturn(testEventManager);
 
-        SimpleServiceManager serviceManager = new SimpleServiceManager(manager);
+        SimpleServiceManager serviceManager = new SimpleServiceManager();
 
-        serviceManager.setProvider(testPlugin, TestInterface.class, new TestImplCow());
+        serviceManager.setProvider(Cause.of(testPlugin), TestInterface.class, new TestImplCow());
 
         Optional<TestInterface> returned = serviceManager.provide(TestInterface.class);
         assertTrue(returned.isPresent());
@@ -78,9 +76,9 @@ public class SimpleServiceManagerTest {
         PowerMockito.mockStatic(Sponge.class);
         PowerMockito.when(Sponge.getEventManager()).thenReturn(testEventManager);
 
-        SimpleServiceManager serviceManager = new SimpleServiceManager(manager);
-        serviceManager.setProvider(testPlugin, TestInterface.class, new TestImplCow());
-        serviceManager.setProvider(testPlugin, TestInterface.class, new TestImplDog());
+        SimpleServiceManager serviceManager = new SimpleServiceManager();
+        serviceManager.setProvider(Cause.of(testPlugin), TestInterface.class, new TestImplCow());
+        serviceManager.setProvider(Cause.of(testPlugin), TestInterface.class, new TestImplDog());
 
         assertEquals("woof", serviceManager.provideUnchecked(TestInterface.class).bark());
     }
@@ -92,14 +90,13 @@ public class SimpleServiceManagerTest {
 
         TestImplCow testImplCow = new TestImplCow();
 
-        SimpleServiceManager serviceManager = new SimpleServiceManager(manager);
-        serviceManager.setProvider(testPlugin, TestInterface.class, testImplCow);
+        SimpleServiceManager serviceManager = new SimpleServiceManager();
+        serviceManager.setProvider(Cause.of(testPlugin), TestInterface.class, testImplCow);
 
         ProviderRegistration<TestInterface> registration = serviceManager.getRegistration(TestInterface.class).get();
 
         assertEquals(TestInterface.class, registration.getService());
         assertEquals(testImplCow, registration.getProvider());
-        assertEquals(testPluginContainer, registration.getPlugin());
     }
 
     public interface TestInterface {

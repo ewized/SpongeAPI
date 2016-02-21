@@ -29,6 +29,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.locale.Dictionary;
+import org.spongepowered.api.plugin.PluginNotFoundException;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.text.action.ClickAction;
 import org.spongepowered.api.text.action.HoverAction;
@@ -50,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
@@ -931,6 +935,162 @@ public abstract class Text implements TextRepresentable {
         }
 
         return builder.build();
+    }
+
+    /**
+     * Returns the Text value for the specified key in the specified
+     * {@link Dictionary} for the specified {@link Locale}.
+     *
+     * @param dictionary Dictionary to search
+     * @param key Key to search for
+     * @param locale Locale target
+     * @return Localized text
+     */
+    public static Text get(Dictionary dictionary, String key, Locale locale, String def) {
+        return of(dictionary.get(key, locale).orElse(def));
+    }
+
+    /**
+     * Returns the Text value for the specified key in the specified
+     * {@link Dictionary} for the specified {@link Locale}.
+     *
+     * @param dictionary Dictionary to search
+     * @param key Key to search for
+     * @param locale Locale target
+     * @return Localized text
+     */
+    public static Text get(Dictionary dictionary, String key, Locale locale) {
+        return of(dictionary, key, locale, "");
+    }
+
+
+    /**
+     * Returns the Text value for the specified key in the specified
+     * {@link Dictionary} for the Dictionary's default {@link Locale}.
+     *
+     * @param dictionary Dictionary to search
+     * @param key Key to search for
+     * @return Localized text
+     */
+    public static Text get(Dictionary dictionary, String key, String def) {
+        return of(dictionary.get(key).orElse(def));
+    }
+
+    /**
+     * Returns the Text value for the specified key in the specified
+     * {@link Dictionary} for the Dictionary's default {@link Locale}.
+     *
+     * @param dictionary Dictionary to search
+     * @param key Key to search for
+     * @return Localized text
+     */
+    public static Text get(Dictionary dictionary, String key) {
+        return of(dictionary, key, "");
+    }
+
+    /**
+     * Returns the Text value for the specified {@link Dictionary} key in the
+     * specified subject's Dictionary.
+     *
+     * @param subject The subject to retrieve Dictionary from
+     * @param key Dictionary key to get
+     * @param locale The locale target for the result Text
+     * @return Text of localized key
+     */
+    public static Text get(Object subject, String key, Locale locale, String def) {
+        return get(Sponge.getPluginManager().fromInstance(subject)
+                .orElseThrow(() -> new PluginNotFoundException(subject))
+                .getServiceManager().provideFirst(Dictionary.class).get(), key, locale, def);
+    }
+
+    /**
+     * Returns the Text value for the specified {@link Dictionary} key in the
+     * specified subject's Dictionary.
+     *
+     * @param subject The subject to retrieve Dictionary from
+     * @param key Dictionary key to get
+     * @param locale The locale target for the result Text
+     * @return Text of localized key
+     */
+    public static Text get(Object subject, String key, Locale locale) {
+        return get(subject, key, locale, "");
+    }
+
+    /**
+     * Returns the Text value for the specified {@link Dictionary} key in the
+     * specified subject's Dictionary for the Dictionary's default Locale.
+     *
+     * @param subject The subject to retrieve Dictionary from
+     * @param key Dictionary key to get
+     * @return Text of localized key
+     */
+    public static Text get(Object subject, String key, String def) {
+        return get(Sponge.getPluginManager().fromInstance(subject)
+                .orElseThrow(() -> new PluginNotFoundException(subject))
+                .getServiceManager().provideFirst(Dictionary.class).get(), key, def);
+    }
+
+    /**
+     * Returns the Text value for the specified {@link Dictionary} key in the
+     * specified subject's Dictionary for the Dictionary's default Locale.
+     *
+     * @param subject The subject to retrieve Dictionary from
+     * @param key Dictionary key to get
+     * @return Text of localized key
+     */
+    public static Text get(Object subject, String key) {
+        return get(subject, key, "");
+    }
+
+    /**
+     * Returns the Text value for the {@link Sponge#getGame()} subject object.
+     * If searchPlugins is true, loaded plugins will be searched until a match
+     * for the specified key is found.
+     *
+     * @param key Key to search for
+     * @param searchPlugins Whether loaded plugins should be searched as well
+     * @return Text of localized key
+     */
+    public static Text get(String key, boolean searchPlugins, String def) {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Returns the Text value for the {@link Sponge#getGame()} subject object.
+     * If searchPlugins is true, loaded plugins will be searched until a match
+     * for the specified key is found.
+     *
+     * @param key Key to search for
+     * @param searchPlugins Whether loaded plugins should be searched as well
+     * @return Text of localized key
+     */
+    public static Text get(String key, boolean searchPlugins) {
+        return get(key, searchPlugins, "");
+    }
+
+    /**
+     * Returns the Text value for the {@link Sponge#getGame()} subject object.
+     * If the key is not found in Sponge's dictionary, loaded plugins will be
+     * searched until a match is found.
+     *
+     * @param key Key to search for
+     * @return Text of localized key
+     */
+    public static Text get(String key, String def) {
+        return get(key, true, def);
+    }
+
+    /**
+     * Returns the Text value for the {@link Sponge#getGame() subject object.
+     * If the key is not found in Sponge's dictionary, loaded plugins will be
+     * searched until a match is found.
+     *
+     * @param key Key to search for
+     * @return Text of localized key
+     */
+    public static Text get(String key) {
+        return get(key, true);
     }
 
     /**

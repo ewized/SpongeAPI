@@ -30,18 +30,10 @@ import com.google.common.collect.MapMaker;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.SpongeEventFactory;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.cause.NamedCause;
-import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.plugin.PluginManager;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -53,37 +45,21 @@ public class SimpleServiceManager implements ServiceManager {
 
     private final ConcurrentMap<Class<?>, ProviderRegistration<?>> providers =
             new MapMaker().concurrencyLevel(3).makeMap();
-    private final PluginManager pluginManager;
 
     /**
      * Construct a simple {@link ServiceManager}.
-     *
-     * @param pluginManager The plugin manager to get the
-     *            {@link PluginContainer} for a given plugin
      */
     @Inject
-    public SimpleServiceManager(PluginManager pluginManager) {
-        checkNotNull(pluginManager, "pluginManager");
-        this.pluginManager = pluginManager;
+    public SimpleServiceManager() {
     }
 
     @Override
-    public <T> void setProvider(Object plugin, Class<T> service, T provider) {
-        checkNotNull(plugin, "plugin");
+    public <T> void setProvider(Cause cause, Class<T> service, T provider) {
         checkNotNull(service, "service");
         checkNotNull(provider, "provider");
-
-        Optional<PluginContainer> containerOptional = this.pluginManager.fromInstance(plugin);
-        if (!containerOptional.isPresent()) {
-            throw new IllegalArgumentException(
-                    "The provided plugin object does not have an associated plugin container "
-                            + "(in other words, is 'plugin' actually your plugin object?)");
-        }
-
-        PluginContainer container = containerOptional.get();
-        ProviderRegistration<?> oldProvider = this.providers.put(service, new Provider<>(container, service, provider));
-        Sponge.getEventManager().post(SpongeEventFactory.createChangeServiceProviderEvent(Cause.of(NamedCause.source(container)),
-                this.providers.get(service), Optional.ofNullable(oldProvider)));
+        ProviderRegistration<?> oldProvider = this.providers.put(service, new Provider<>(service, provider, cause));
+        Sponge.getEventManager().post(SpongeEventFactory.createChangeServiceProviderEvent(cause, this.providers.get(service),
+                Optional.ofNullable(oldProvider)));
     }
 
 
@@ -93,6 +69,20 @@ public class SimpleServiceManager implements ServiceManager {
         checkNotNull(service, "service");
         @Nullable ProviderRegistration<T> provider = (ProviderRegistration<T>) this.providers.get(service);
         return provider != null ? Optional.of(provider.getProvider()) : Optional.empty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> Optional<T> provideFirst(Class<T> service) {
+        checkNotNull(service, "service");
+        for (Map.Entry<Class<?>, ProviderRegistration<?>> entry : this.providers.entrySet()) {
+            Class<?> s = entry.getKey();
+            ProviderRegistration<?> provider = entry.getValue();
+            if (s.isAssignableFrom(service)) {
+                return Optional.of((T) provider.getProvider());
+            }
+        }
+        return Optional.empty();
     }
 
     @SuppressWarnings("unchecked")
@@ -115,15 +105,14 @@ public class SimpleServiceManager implements ServiceManager {
 
     private static class Provider<T> implements ProviderRegistration<T> {
 
-        @SuppressWarnings("unused")
-        private final PluginContainer container;
         private final Class<T> service;
         private final T provider;
+        private final Cause cause;
 
-        private Provider(PluginContainer container, Class<T> service, T provider) {
-            this.container = container;
+        private Provider(Class<T> service, T provider, Cause cause) {
             this.service = service;
             this.provider = provider;
+            this.cause = cause;
         }
 
         @Override
@@ -137,8 +126,8 @@ public class SimpleServiceManager implements ServiceManager {
         }
 
         @Override
-        public PluginContainer getPlugin() {
-            return this.container;
+        public Cause getCause() {
+            return this.cause;
         }
     }
 

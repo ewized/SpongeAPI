@@ -22,34 +22,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.service;
+package org.spongepowered.api.locale;
 
-import org.spongepowered.api.event.cause.Cause;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
- * Represents the registration information for the provider of a service.
+ * Represents a simple implementation of {@link ResourceBundleDictionary} using
+ * a "base name" and {@link ResourceBundle#getBundle(String)} to retrieve
+ * bundles.
  */
-public interface ProviderRegistration<T> {
+public class SimpleResourceBundleDictionary extends AbstractDictionary implements ResourceBundleDictionary<ResourceBundle> {
 
-    /**
-     * Gets the service of this provider registration.
-     *
-     * @return The service
-     */
-    Class<T> getService();
+    protected final String baseName;
+    protected final Map<Locale, ResourceBundle> bundles = new HashMap<>();
 
-    /**
-     * Gets the service provider of this provider regitration.
-     *
-     * @return The provider
-     */
-    T getProvider();
+    public SimpleResourceBundleDictionary(Object subject, Locale defaultLocale, String baseName) {
+        super(subject, defaultLocale);
+        this.baseName = baseName;
+    }
 
-    /**
-     * Returns the {@link Cause} of the registration.
-     *
-     * @return Cause of registration
-     */
-    Cause getCause();
+    @Override
+    public Optional<ResourceBundle> getBundle(Locale locale) {
+        ResourceBundle bundle = this.bundles.get(locale);
+        if (bundle == null) {
+            setBundle(locale, bundle = ResourceBundle.getBundle(this.baseName));
+        }
+        return Optional.of(bundle);
+    }
 
+    @Override
+    public void setBundle(Locale locale, ResourceBundle bundle) {
+        this.bundles.put(locale, bundle);
+    }
 }

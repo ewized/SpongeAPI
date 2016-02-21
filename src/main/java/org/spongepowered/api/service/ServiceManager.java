@@ -24,6 +24,8 @@
  */
 package org.spongepowered.api.service;
 
+import org.spongepowered.api.event.cause.Cause;
+
 import java.util.Optional;
 
 /**
@@ -34,7 +36,7 @@ import java.util.Optional;
  * with the service(s) that the provider implements.</p>
  *
  * <p>Providers are registered at runtime using
- * {@link #setProvider(Object, Class, Object)}. Only one provider
+ * {@link #setProvider(Cause, Class, Object)}. Only one provider
  * can be registered for each service, but a provider can be marked as
  * replaceable if it can be replaced with a new provider.</p>
  */
@@ -48,14 +50,14 @@ public interface ServiceManager {
      * <p>Services should only be registered during initialization. If services
      * are registered later, then they may not be utilized.</p>
      *
-     * @param plugin The instance of a plugin
+     * @param cause The cause of the provider change.
      * @param service The service
      * @param provider The implementation
      * @param <T> The type of service
      * @throws IllegalArgumentException Thrown if {@code plugin} is not a
      *     plugin instance
      */
-    <T> void setProvider(Object plugin, Class<T> service, T provider);
+    <T> void setProvider(Cause cause, Class<T> service, T provider);
 
     /**
      * Return a provider for the given service, if one is available.
@@ -68,6 +70,15 @@ public interface ServiceManager {
      * @return A provider, if available
      */
     <T> Optional<T> provide(Class<T> service);
+
+    /**
+     * Returns the first provider that is derived from the specified service.
+     *
+     * @param service The service
+     * @param <T> The type of service
+     * @return A provider, if available
+     */
+    <T> Optional<T> provideFirst(Class<T> service);
 
     /**
      * Gets the {@link ProviderRegistration} for the given service, if available.
