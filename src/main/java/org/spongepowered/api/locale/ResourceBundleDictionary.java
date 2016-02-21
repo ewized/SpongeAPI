@@ -30,6 +30,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents a {@link Dictionary} that handles retrieval through {@link ResourceBundle}s.
  *
@@ -57,7 +59,6 @@ public interface ResourceBundleDictionary<B extends ResourceBundle> extends Dict
     default Optional<String> get(String key, Locale locale) {
         checkNotNull(key, "key");
         checkNotNull(locale, "locale");
-        String value = getBundle(locale).getString(key);
-        return Optional.ofNullable(value.equals("null") ? null : value);
+        return Optional.of(getBundle(locale).getString(key));
     }
 }
