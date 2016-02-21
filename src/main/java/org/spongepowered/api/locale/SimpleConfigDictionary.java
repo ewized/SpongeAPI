@@ -24,20 +24,17 @@
  */
 package org.spongepowered.api.locale;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import ninja.leaping.configurate.ConfigurationNode;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * Represents a simple implementation of {@link ConfigDictionary}.
+ * Represents a simple implementation of {@link ConfigDictionary} with a single source.
  */
-public class SimpleConfigDictionary extends AbstractRemoteDictionary implements ConfigDictionary {
+public class SimpleConfigDictionary extends AbstractConfigDictionary {
 
     protected final Map<Locale, ConfigResourceBundle> bundles = new HashMap<>();
 
@@ -47,27 +44,9 @@ public class SimpleConfigDictionary extends AbstractRemoteDictionary implements 
 
     @Override
     public ConfigurationNode load(Locale locale) throws IOException {
-        ConfigurationNode localeNode = ConfigDictionary.super.load(locale).getNode(locale.toString());
+        ConfigurationNode localeNode = super.load(locale).getNode(locale.toString());
         this.bundles.put(locale, new ConfigResourceBundle(localeNode));
         return localeNode;
     }
 
-    @Override
-    public Optional<ConfigurationNode> getNode(Locale locale) {
-        ConfigResourceBundle bundle = this.bundles.get(locale);
-        if (bundle != null) {
-            return Optional.of(bundle.getNode());
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<ConfigResourceBundle> getBundle(Locale locale) {
-        return Optional.ofNullable(this.bundles.get(locale));
-    }
-
-    @Override
-    public void setBundle(Locale locale, ConfigResourceBundle bundle) {
-        this.bundles.put(checkNotNull(locale, "locale"), checkNotNull(bundle, "bundle"));
-    }
 }
