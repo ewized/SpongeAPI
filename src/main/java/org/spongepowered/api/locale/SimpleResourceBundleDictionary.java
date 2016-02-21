@@ -24,10 +24,11 @@
  */
 package org.spongepowered.api.locale;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -46,16 +47,18 @@ public class SimpleResourceBundleDictionary extends AbstractDictionary implement
     }
 
     @Override
-    public Optional<ResourceBundle> getBundle(Locale locale) {
+    public ResourceBundle getBundle(Locale locale) {
+        checkNotNull(locale, "locale");
         ResourceBundle bundle = this.bundles.get(locale);
         if (bundle == null) {
             setBundle(locale, bundle = ResourceBundle.getBundle(this.baseName));
         }
-        return Optional.of(bundle);
+        return bundle;
     }
 
     @Override
     public void setBundle(Locale locale, ResourceBundle bundle) {
+        checkNotNull(locale, "locale");
         this.bundles.put(locale, bundle);
     }
 }

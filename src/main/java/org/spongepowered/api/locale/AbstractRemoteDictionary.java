@@ -24,6 +24,8 @@
  */
 package org.spongepowered.api.locale;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.InputStream;
 import java.util.Locale;
 
@@ -49,6 +51,7 @@ public abstract class AbstractRemoteDictionary extends AbstractDictionary implem
 
     @Override
     public InputStream getSource(Locale locale) throws Exception {
+        checkNotNull(locale, "locale");
         return this.resolver.resolve(locale).orElseThrow(() -> new IllegalStateException("Could not resolve source for locale " + locale + "."));
     }
 

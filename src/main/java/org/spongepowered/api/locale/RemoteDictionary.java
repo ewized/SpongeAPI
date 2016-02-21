@@ -24,6 +24,8 @@
  */
 package org.spongepowered.api.locale;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ public interface RemoteDictionary extends Dictionary {
          * @return This resolver
          */
         public SourceResolver primary(Callable<InputStream> primary) {
-            this.primary = primary;
+            this.primary = checkNotNull(primary, "primary");
             return this;
         }
 
@@ -89,6 +91,8 @@ public interface RemoteDictionary extends Dictionary {
          * @return This resolver
          */
         public SourceResolver add(Locale locale, Callable<InputStream> callable) {
+            checkNotNull(locale, "locale");
+            checkNotNull(callable, "callable");
             List<Callable<InputStream>> list = this.sources.get(locale);
             if (list == null) {
                 list = new ArrayList<>();
@@ -107,6 +111,7 @@ public interface RemoteDictionary extends Dictionary {
          * @throws Exception
          */
         public Optional<InputStream> resolve(Locale locale) throws Exception {
+            checkNotNull(locale, "locale");
             List<Callable<InputStream>> list = this.sources.get(locale);
             if (list == null) {
                 list = Collections.emptyList();

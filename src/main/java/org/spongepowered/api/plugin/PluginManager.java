@@ -25,6 +25,8 @@
 package org.spongepowered.api.plugin;
 
 import org.slf4j.Logger;
+import org.spongepowered.api.locale.Dictionary;
+import org.spongepowered.api.locale.NullDictionary;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -75,5 +77,18 @@ public interface PluginManager {
      * @return {@code true} if loaded {@code false} if not loaded.
      */
     boolean isLoaded(String id);
+
+    /**
+     * Returns the {@link Dictionary} for the given plugin instance.
+     *
+     * @param plugin Plugin instance
+     * @return Dictionary provided by plugin or {@link NullDictionary} if none
+     *         was provided
+     */
+    default Dictionary getDictionary(Object plugin) {
+        return fromInstance(plugin).orElseThrow(() -> new PluginNotFoundException(plugin))
+                .getServiceManager().provideFirst(Dictionary.class)
+                .orElseGet(() -> new NullDictionary(plugin));
+    }
 
 }

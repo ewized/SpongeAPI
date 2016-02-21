@@ -24,6 +24,8 @@
  */
 package org.spongepowered.api.locale;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -41,7 +43,7 @@ public interface ResourceBundleDictionary<B extends ResourceBundle> extends Dict
      * @param locale Locale to get bundle for
      * @return Optional bundle
      */
-    Optional<B> getBundle(Locale locale);
+    B getBundle(Locale locale);
 
     /**
      * Sets the {@link ResourceBundle} for the specified {@link Locale}.
@@ -53,10 +55,8 @@ public interface ResourceBundleDictionary<B extends ResourceBundle> extends Dict
 
     @Override
     default Optional<String> get(String key, Locale locale) {
-        Optional<B> bundle = getBundle(locale);
-        if (bundle.isPresent()) {
-            return Optional.of(bundle.get().getString(key));
-        }
-        return Optional.empty();
+        checkNotNull(key, "key");
+        checkNotNull(locale, "locale");
+        return Optional.of(getBundle(locale).getString(key));
     }
 }

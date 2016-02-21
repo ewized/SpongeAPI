@@ -36,6 +36,7 @@ import java.util.Map;
  */
 public class SimpleConfigDictionary extends AbstractConfigDictionary {
 
+    protected ConfigurationNode root;
     protected final Map<Locale, ConfigResourceBundle> bundles = new HashMap<>();
 
     public SimpleConfigDictionary(Object subject, Locale defaultLocale) {
@@ -44,9 +45,15 @@ public class SimpleConfigDictionary extends AbstractConfigDictionary {
 
     @Override
     public ConfigurationNode load(Locale locale) throws IOException {
-        ConfigurationNode localeNode = super.load(locale).getNode(locale.toString());
-        this.bundles.put(locale, new ConfigResourceBundle(localeNode));
-        return localeNode;
+        return this.root = super.load(locale);
+    }
+
+    @Override
+    public ConfigurationNode getNode(Locale locale) {
+        if (this.root == null) {
+            throw new IllegalStateException("Tried to read SimpleConfigDictionary before it was loaded.");
+        }
+        return this.root.getNode(locale.toString());
     }
 
 }

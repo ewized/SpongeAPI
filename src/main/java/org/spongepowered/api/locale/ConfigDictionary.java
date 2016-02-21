@@ -37,7 +37,6 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -53,6 +52,7 @@ public interface ConfigDictionary extends RemoteDictionary, ResourceBundleDictio
      * @return Config loader
      */
     default ConfigurationLoader getLoader(Locale locale) {
+        checkNotNull(locale, "locale");
         return HoconConfigurationLoader.builder().setSource(() -> new BufferedReader(new InputStreamReader(getSource(locale)))).build();
     }
 
@@ -92,14 +92,14 @@ public interface ConfigDictionary extends RemoteDictionary, ResourceBundleDictio
      * @param locale Locale to get node for
      * @return Result node
      */
-    Optional<ConfigurationNode> getNode(Locale locale);
+    ConfigurationNode getNode(Locale locale);
 
     /**
      * Returns the ConfigurationNode for the default {@link Locale}.
      *
      * @return Result node
      */
-    default Optional<ConfigurationNode> getNode() {
+    default ConfigurationNode getNode() {
         return getNode(getDefaultLocale());
     }
 
@@ -125,6 +125,7 @@ public interface ConfigDictionary extends RemoteDictionary, ResourceBundleDictio
 
         @Override
         protected Object handleGetObject(String key) {
+            checkNotNull(key, "key");
             return this.node.getNode(key).getString();
         }
 
