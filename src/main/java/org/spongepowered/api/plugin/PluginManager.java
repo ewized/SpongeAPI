@@ -27,6 +27,7 @@ package org.spongepowered.api.plugin;
 import org.slf4j.Logger;
 import org.spongepowered.api.locale.Dictionary;
 import org.spongepowered.api.locale.NullDictionary;
+import org.spongepowered.api.service.ServiceManager;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -45,6 +46,17 @@ public interface PluginManager {
      * @return The container
      */
     Optional<PluginContainer> fromInstance(Object instance);
+
+    /**
+     * Finds the {@link PluginContainer} for the specified plugin instance.
+     *
+     * @param instance Plugin instance
+     * @return Plugin container of instance
+     * @throws PluginNotFoundException if the instance could not be found
+     */
+    default PluginContainer findPlugin(Object instance) {
+        return fromInstance(instance).orElseThrow(() -> new PluginNotFoundException(instance));
+    }
 
     /**
      * Retrieves a {@link PluginContainer} based on its ID.
@@ -79,6 +91,44 @@ public interface PluginManager {
     boolean isLoaded(String id);
 
     /**
+     * Gets the id of the {@link Plugin}.
+     *
+     * @return The id
+     */
+    default String getId(Object plugin) {
+        return findPlugin(plugin).getId();
+    }
+
+    /**
+     * Gets the name of the {@link Plugin}.
+     *
+     * @return The name
+     */
+    default String getName(Object plugin) {
+        return findPlugin(plugin).getName();
+    }
+
+    /**
+     * Gets the version of the {@link Plugin}.
+     *
+     * @return The name
+     */
+    default String getVersion(Object plugin) {
+        return findPlugin(plugin).getVersion();
+    }
+
+    /**
+     * Returns the internal {@link ServiceManager} for the specified plugin
+     * instance.
+     *
+     * @param plugin Instance of plugin
+     * @return Internal plugin service manager
+     */
+    default ServiceManager getServiceManager(Object plugin) {
+        return findPlugin(plugin).getServiceManager();
+    }
+
+    /**
      * Returns the {@link Dictionary} for the given plugin instance.
      *
      * @param plugin Plugin instance
@@ -86,8 +136,7 @@ public interface PluginManager {
      *         was provided
      */
     default Dictionary getDictionary(Object plugin) {
-        return fromInstance(plugin).orElseThrow(() -> new PluginNotFoundException(plugin))
-                .getServiceManager().provideFirst(Dictionary.class)
+        return getServiceManager(plugin).provideFirst(Dictionary.class)
                 .orElseGet(() -> new NullDictionary(plugin));
     }
 

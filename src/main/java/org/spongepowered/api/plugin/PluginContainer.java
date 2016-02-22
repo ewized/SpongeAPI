@@ -58,6 +58,13 @@ public interface PluginContainer {
     String getVersion();
 
     /**
+     * Returns the plugin's internal service manager.
+     *
+     * @return Internal service manager
+     */
+    ServiceManager getServiceManager();
+
+    /**
      * Returns the assigned logger to this {@link Plugin}.
      *
      * @return The assigned logger
@@ -72,12 +79,5 @@ public interface PluginContainer {
      * @return The instance if available
      */
     Optional<Object> getInstance();
-
-    /**
-     * Returns the plugin's internal service manager.
-     *
-     * @return Internal service manager
-     */
-    ServiceManager getServiceManager();
 
 }
