@@ -51,4 +51,5 @@ public class DefaultDictionary extends SimpleConfigDictionary {
         }
         return this.subject.getClass().getClassLoader().getResourceAsStream(this.path.getFileName().toString());
     }
+
 }

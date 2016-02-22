@@ -47,4 +47,5 @@ public final class NullDictionary extends AbstractDictionary {
     public Optional<String> get(String key) {
         return Optional.empty();
     }
+
 }

@@ -56,4 +56,5 @@ public abstract class AbstractConfigDictionary extends AbstractRemoteDictionary 
         checkNotNull(locale, "locale");
         this.bundles.put(locale, bundle);
     }
+
 }

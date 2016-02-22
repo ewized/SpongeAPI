@@ -54,7 +54,7 @@ public interface PluginManager {
      * @return Plugin container of instance
      * @throws PluginNotFoundException if the instance could not be found
      */
-    default PluginContainer findPlugin(Object instance) {
+    default PluginContainer find(Object instance) {
         return fromInstance(instance).orElseThrow(() -> new PluginNotFoundException(instance));
     }
 
@@ -96,7 +96,7 @@ public interface PluginManager {
      * @return The id
      */
     default String getId(Object plugin) {
-        return findPlugin(plugin).getId();
+        return find(plugin).getId();
     }
 
     /**
@@ -105,7 +105,7 @@ public interface PluginManager {
      * @return The name
      */
     default String getName(Object plugin) {
-        return findPlugin(plugin).getName();
+        return find(plugin).getName();
     }
 
     /**
@@ -114,7 +114,7 @@ public interface PluginManager {
      * @return The name
      */
     default String getVersion(Object plugin) {
-        return findPlugin(plugin).getVersion();
+        return find(plugin).getVersion();
     }
 
     /**
@@ -125,7 +125,7 @@ public interface PluginManager {
      * @return Internal plugin service manager
      */
     default ServiceManager getServiceManager(Object plugin) {
-        return findPlugin(plugin).getServiceManager();
+        return find(plugin).getServiceManager();
     }
 
     /**
@@ -136,8 +136,7 @@ public interface PluginManager {
      *         was provided
      */
     default Dictionary getDictionary(Object plugin) {
-        return getServiceManager(plugin).provideFirst(Dictionary.class)
-                .orElseGet(() -> new NullDictionary(plugin));
+        return getServiceManager(plugin).provideFirst(Dictionary.class).orElseGet(() -> new NullDictionary(plugin));
     }
 
 }

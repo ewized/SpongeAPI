@@ -51,7 +51,7 @@ public class SimpleResourceBundleDictionary extends AbstractDictionary implement
         checkNotNull(locale, "locale");
         ResourceBundle bundle = this.bundles.get(locale);
         if (bundle == null) {
-            setBundle(locale, bundle = ResourceBundle.getBundle(this.baseName));
+            setBundle(locale, bundle = ResourceBundle.getBundle(this.baseName, locale));
         }
         return bundle;
     }
@@ -61,4 +61,5 @@ public class SimpleResourceBundleDictionary extends AbstractDictionary implement
         checkNotNull(locale, "locale");
         this.bundles.put(locale, bundle);
     }
+
 }
