@@ -136,7 +136,7 @@ public interface PluginManager {
      *         was provided
      */
     default Dictionary getDictionary(Object plugin) {
-        return getServiceManager(plugin).provideFirst(Dictionary.class).orElseGet(() -> new NullDictionary(plugin));
+        return getServiceManager(plugin).provideFirst(Dictionary.class).orElse(new NullDictionary(plugin));
     }
 
 }
