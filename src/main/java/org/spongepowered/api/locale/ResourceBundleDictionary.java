@@ -27,6 +27,7 @@ package org.spongepowered.api.locale;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -57,7 +58,12 @@ public interface ResourceBundleDictionary<B extends ResourceBundle> extends Dict
     default Optional<String> get(String key, Locale locale) {
         checkNotNull(key, "key");
         checkNotNull(locale, "locale");
-        return Optional.of(getBundle(locale).getString(key));
+        String result;
+        try {
+            return Optional.of(getBundle(locale).getString(key));
+        } catch (MissingResourceException e) {
+            return Optional.empty();
+        }
     }
 
 }
