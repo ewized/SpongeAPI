@@ -29,6 +29,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
+import com.google.common.reflect.TypeToken;
+import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
+import org.spongepowered.api.data.DataContainer;
+import org.spongepowered.api.data.DataSerializable;
+import org.spongepowered.api.data.MemoryDataContainer;
+import org.spongepowered.api.data.Queries;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.text.action.ClickAction;
 import org.spongepowered.api.text.action.HoverAction;
@@ -39,6 +45,7 @@ import org.spongepowered.api.text.format.TextFormat;
 import org.spongepowered.api.text.format.TextStyle;
 import org.spongepowered.api.text.format.TextStyles;
 import org.spongepowered.api.text.selector.Selector;
+import org.spongepowered.api.text.serializer.TextConfigSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.text.translation.Translatable;
 import org.spongepowered.api.text.translation.Translation;
@@ -75,7 +82,11 @@ import javax.annotation.Nullable;
  * @see SelectorText
  * @see ScoreText
  */
-public abstract class Text implements TextRepresentable {
+public abstract class Text implements TextRepresentable, DataSerializable {
+
+    static {
+        TypeSerializers.getDefaultSerializers().registerType(TypeToken.of(Text.class), new TextConfigSerializer());
+    }
 
     /**
      * The empty, unformatted {@link Text} instance.
@@ -246,6 +257,18 @@ public abstract class Text implements TextRepresentable {
      */
     public final String toPlain() {
         return TextSerializers.PLAIN.serialize(this);
+    }
+
+    @Override
+    public int getContentVersion() {
+        return 1;
+    }
+
+    @Override
+    public DataContainer toContainer() {
+        return new MemoryDataContainer()
+                .set(Queries.CONTENT_VERSION, getContentVersion())
+                .set(Queries.JSON, TextSerializers.JSON.serialize(this));
     }
 
     @Override
