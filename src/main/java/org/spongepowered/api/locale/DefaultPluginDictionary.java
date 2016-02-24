@@ -45,4 +45,8 @@ public class DefaultPluginDictionary extends DefaultDictionary {
         super(plugin, defaultLocale, Paths.get(dir.toString(), Sponge.getPluginManager().getId(plugin) + FILE_EXTENSION));
     }
 
+    public DefaultPluginDictionary(Object plugin, Path dir) {
+        this(plugin, Sponge.getLocale(), dir);
+    }
+
 }

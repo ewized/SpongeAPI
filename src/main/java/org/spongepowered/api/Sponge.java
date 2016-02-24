@@ -34,6 +34,8 @@ import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.service.ServiceManager;
 
+import java.util.Locale;
+
 public final class Sponge {
 
     private static final Game game = null;
@@ -85,6 +87,10 @@ public final class Sponge {
 
     public static ChannelRegistrar getChannelRegistrar() {
         return getGame().getChannelRegistrar();
+    }
+
+    public static Locale getLocale() {
+        return getGame().getLocale();
     }
 
 }

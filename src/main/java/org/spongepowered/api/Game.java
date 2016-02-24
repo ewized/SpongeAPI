@@ -36,11 +36,13 @@ import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.service.ServiceManager;
+import org.spongepowered.api.text.translation.locale.Locales;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.TeleportHelper;
 import org.spongepowered.api.world.World;
 
 import java.nio.file.Path;
+import java.util.Locale;
 
 /**
  * The core accessor of the API. The implementation uses this to pass
@@ -164,5 +166,14 @@ public interface Game {
      * @return The channel registrar
      */
     ChannelRegistrar getChannelRegistrar();
+
+    /**
+     * Returns the {@link Locale} this game is running on.
+     *
+     * @return Game locale
+     */
+    default Locale getLocale() {
+        return Locales.DEFAULT;
+    }
 
 }
