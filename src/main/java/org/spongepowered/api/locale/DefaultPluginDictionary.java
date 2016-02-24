@@ -46,7 +46,7 @@ public class DefaultPluginDictionary extends DefaultDictionary {
     }
 
     public DefaultPluginDictionary(Object plugin, Path dir) {
-        this(plugin, Sponge.getLocale(), dir);
+        this(plugin, Sponge.getServer().getLocale(), dir);
     }
 
 }
