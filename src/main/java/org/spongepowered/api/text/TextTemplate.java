@@ -39,6 +39,7 @@ import org.spongepowered.api.text.format.TextFormat;
 import org.spongepowered.api.text.format.TextStyle;
 import org.spongepowered.api.text.serializer.TextTemplateConfigSerializer;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -150,6 +151,21 @@ public final class TextTemplate implements TextRepresentable, Iterable<Object> {
      */
     public String getCloseArgString() {
         return this.closeArg;
+    }
+
+    /**
+     * Concatenates the specified {@link TextTemplate} to this template and
+     * returns the result. In the event that the two templates' open/close
+     * argument containers vary, this template's argument containers will be
+     * used.
+     *
+     * @param other To concatenate
+     * @return Concatenated template
+     */
+    public TextTemplate concat(TextTemplate other) {
+        List<Object> elements = new ArrayList<>(this.elements);
+        elements.addAll(other.elements);
+        return of(this.openArg, this.closeArg, elements.toArray(new Object[elements.size()]));
     }
 
     /**

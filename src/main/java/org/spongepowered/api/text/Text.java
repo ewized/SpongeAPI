@@ -259,6 +259,17 @@ public abstract class Text implements TextRepresentable, DataSerializable {
         return TextSerializers.PLAIN.serialize(this);
     }
 
+    /**
+     * Concatenates the specified {@link Text} to this Text and returns the
+     * result.
+     *
+     * @param other To concatenate
+     * @return Concatenated text
+     */
+    public final Text concat(Text other) {
+        return toBuilder().append(other).build();
+    }
+
     @Override
     public int getContentVersion() {
         return 1;
