@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.plugin.processor;
+package org.spongepowered.plugin.processor;
 
 /**
  * Thrown if an exception occurs in the plugin annotation processor.

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.plugin.processor;
+package org.spongepowered.plugin.processor;
 
 import static javax.tools.Diagnostic.Kind.ERROR;
 import static javax.tools.Diagnostic.Kind.NOTE;

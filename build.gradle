@@ -26,6 +26,12 @@ version = '4.0.0-SNAPSHOT'
 ext.api = project
 apply from: 'gradle/sponge.gradle'
 
+sourceSets {
+    ap {
+        compileClasspath += main.compileClasspath + main.output
+    }
+}
+
 repositories {
     mavenLocal() // TODO
 }
@@ -63,6 +69,8 @@ dependencies {
 
 // JAR manifest configuration
 jar {
+    from sourceSets.ap.output
+
     manifest {
         attributes('Main-Class': 'org.spongepowered.api.util.InformativeMain')
     }
@@ -71,6 +79,7 @@ jar {
 task sourceJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
+    from sourceSets.ap.allSource
 }
 
 artifacts {
@@ -118,6 +127,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 shadowJar {
     classifier = 'shaded'
+    from sourceSets.ap.output
 }
 
 artifacts {

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.plugin.processor;
+package org.spongepowered.plugin.processor;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -181,7 +181,7 @@ final class PluginElement {
         }
     }
 
-    static void applyMeta(PluginMetadata meta, PluginMetadata other) {
+    static void applyMeta(PluginMetadata meta, PluginMetadata other, Messager messager) {
         checkArgument(meta.getId().equals(other.getId()), "Plugin meta IDs don't match");
 
         if (other.getName() != null) {
@@ -198,11 +198,17 @@ final class PluginElement {
         }
 
         // TODO: Dependencies
+        if (!other.getRequiredDependencies().isEmpty() || !other.getLoadAfter().isEmpty() || !other.getLoadBefore().isEmpty()) {
+            messager.printMessage(WARNING, "Trying to merge dependencies from extra metadata file. This is currently not supported.");
+        }
 
         other.getExtensions().forEach((key, extension) -> {
             // TODO
-            checkArgument(!meta.getExtensions().containsKey(key), "Cannot merge extension %s of type %s", key, extension);
-            meta.setExtension(key, extension);
+            if (meta.getExtensions().containsKey(key)) {
+                messager.printMessage(WARNING, "Cannot merge extension " + key + " of type " + extension.getClass() + " from extra metadata file");
+            } else {
+                meta.setExtension(key, extension);
+            }
         });
     }
 
