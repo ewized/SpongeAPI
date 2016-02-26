@@ -37,7 +37,7 @@ import java.util.regex.Pattern;
 @Target(ElementType.TYPE)
 public @interface Plugin {
 
-    Pattern ID_PATTERN = Pattern.compile("[a-z][a-z0-9-_.]*");
+    Pattern ID_PATTERN = Pattern.compile("[a-z](?:[a-z0-9-_.]*[a-z0-9-_])?");
 
     /**
      * An ID for the plugin to be used internally. The ID should be unique as to
