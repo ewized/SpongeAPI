@@ -51,12 +51,12 @@ public @interface Dependency {
      * <tr><th>Range</th><th>Meaning</th></tr>
      * <tr><td>1.0</td><td>Any dependency version, 1.0 is recommended</td></tr>
      * <tr><td>[1.0]</td><td>x == 1.0</td></tr>
-     * <tr><td>[1.0,)</td><td>x >= 1.0</td></tr>
-     * <tr><td>(1.0,)</td><td>x > 1.0</td></tr>
-     * <tr><td>(,1.0]</td><td>x <= 1.0</td></tr>
-     * <tr><td>(,1.0)</td><td>x < 1.0</td></tr>
-     * <tr><td>(1.0,2.0)</td><td>1.0 < x < 2.0</td></tr>
-     * <tr><td>[1.0,2.0]</td><td>1.0 <= x <= 2.0</td></tr>
+     * <tr><td>[1.0,)</td><td>x &gt;= 1.0</td></tr>
+     * <tr><td>(1.0,)</td><td>x &gt; 1.0</td></tr>
+     * <tr><td>(,1.0]</td><td>x &lt;= 1.0</td></tr>
+     * <tr><td>(,1.0)</td><td>x &lt; 1.0</td></tr>
+     * <tr><td>(1.0,2.0)</td><td>1.0 &lt; x &lt; 2.0</td></tr>
+     * <tr><td>[1.0,2.0]</td><td>1.0 &lt;= x &lt;= 2.0</td></tr>
      * </table>
      *
      * @return The required version range, or an empty string if unspecified
