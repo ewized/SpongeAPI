@@ -29,6 +29,8 @@ package org.spongepowered.plugin.processor;
  */
 final class PluginProcessExeption extends RuntimeException {
 
+    private static final long serialVersionUID = -8573308144869929605L;
+
     public PluginProcessExeption() {
     }
 
