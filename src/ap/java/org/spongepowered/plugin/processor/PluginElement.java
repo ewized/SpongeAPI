@@ -75,8 +75,8 @@ final class PluginElement {
         }
 
         if (value.indexOf('.') == -1) {
-            messager.printMessage(WARNING, "Unqualified plugin ID '" + value + "'. It is recommend to prefix your plugin ID with a group. See the "
-                    + "@Plugin Javadocs for details", this.element, this.annotation.getMirror(), this.annotation.getValue("id"));
+            messager.printMessage(WARNING, "Unqualified plugin ID '" + value + "'. It is recommend to prefix your plugin ID with a qualified group. "
+                    + "See the @Plugin Javadocs for details.", this.element, this.annotation.getMirror(), this.annotation.getValue("id"));
         }
 
         value = this.annotation.get().description();
