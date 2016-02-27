@@ -57,6 +57,31 @@ public class DynamicPartitionedTextFormatter implements PartitionedTextFormatter
     }
 
     @Override
+    public SimpleTextFormatter get(int i) {
+        return this.partitions.get(i);
+    }
+
+    @Override
+    public SimpleTextFormatter set(int i, SimpleTextFormatter element) {
+        return this.partitions.set(i, element);
+    }
+
+    @Override
+    public int size() {
+        return this.partitions.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.partitions.isEmpty();
+    }
+
+    @Override
+    public boolean contains(SimpleTextFormatter element) {
+        return this.partitions.contains(element);
+    }
+
+    @Override
     public void clear() {
         this.partitions.clear();
     }

@@ -66,6 +66,31 @@ public class SimpleTextFormatter implements TextFormatter<SimpleTextTemplateAppl
     }
 
     @Override
+    public SimpleTextTemplateApplier get(int i) {
+        return this.parts.get(i);
+    }
+
+    @Override
+    public SimpleTextTemplateApplier set(int i, SimpleTextTemplateApplier element) {
+        return this.parts.set(i, element);
+    }
+
+    @Override
+    public int size() {
+        return this.parts.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.parts.isEmpty();
+    }
+
+    @Override
+    public boolean contains(SimpleTextTemplateApplier element) {
+        return this.parts.contains(element);
+    }
+
+    @Override
     public void clear() {
         this.parts.clear();
     }

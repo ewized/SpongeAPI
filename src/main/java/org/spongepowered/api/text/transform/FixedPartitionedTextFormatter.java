@@ -53,6 +53,45 @@ public class FixedPartitionedTextFormatter implements PartitionedTextFormatter<S
         return ImmutableList.copyOf(this.partitions);
     }
 
+    @Override
+    public SimpleTextFormatter get(int i) {
+        return partitions[i];
+    }
+
+    @Override
+    public SimpleTextFormatter set(int i, SimpleTextFormatter element) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int size() {
+        return partitions.length;
+    }
+
+    /**
+     * Returns true if each partition is empty.
+     *
+     * @return True if each partition is empty
+     */
+    @Override
+    public boolean isEmpty() {
+        boolean empty = true;
+        for (SimpleTextFormatter partition : this) {
+            empty &= partition.isEmpty();
+        }
+        return empty;
+    }
+
+    @Override
+    public boolean contains(SimpleTextFormatter element) {
+        for (SimpleTextFormatter partition : this) {
+            if (element.equals(partition)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Clears each partition. Retains the actual partitions themselves.
      */
