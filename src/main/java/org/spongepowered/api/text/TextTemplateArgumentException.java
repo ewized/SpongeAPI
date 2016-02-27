@@ -22,22 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.event.entity;
-
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.entity.living.TargetLivingEvent;
-import org.spongepowered.api.event.message.MessageChannelEvent;
+package org.spongepowered.api.text;
 
 /**
- * An event where the {@link Entity} is being either removed usually due to
- * the {@link Entity} being marked as "dead". Happens before {@link HarvestEntityEvent}.
+ * Exception thrown when invalid arguments are provided to a
+ * {@link TextTemplate}.
  */
-public interface DestructEntityEvent extends TargetEntityEvent, MessageChannelEvent {
+public class TextTemplateArgumentException extends IllegalArgumentException {
+
+    private static final long serialVersionUID = 4163260231862633490L;
 
     /**
-     * A derivative of {@link DestructEntityEvent} where the removal of the {@link Living}, the {@link TargetLivingEvent#getTargetEntity()},
-     * is due to it losing its health.
+     * Creates exception with the specified message.
+     *
+     * @param msg Exception message
      */
-    interface Death extends DestructEntityEvent, TargetLivingEvent {}
+    public TextTemplateArgumentException(String msg) {
+        super(msg);
+    }
+
 }

@@ -22,22 +22,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.event.entity;
+package org.spongepowered.api.text.transform;
 
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.entity.living.TargetLivingEvent;
-import org.spongepowered.api.event.message.MessageChannelEvent;
+import com.google.common.collect.ImmutableMap;
+import org.spongepowered.api.text.TextElement;
+import org.spongepowered.api.text.TextTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * An event where the {@link Entity} is being either removed usually due to
- * the {@link Entity} being marked as "dead". Happens before {@link HarvestEntityEvent}.
+ * A basic implementation of {@link TextTemplateApplier} backed by a {@link HashMap} and
+ * an empty {@link TextTemplate} by default.
  */
-public interface DestructEntityEvent extends TargetEntityEvent, MessageChannelEvent {
+public class SimpleTextTemplateApplier implements TextTemplateApplier {
 
-    /**
-     * A derivative of {@link DestructEntityEvent} where the removal of the {@link Living}, the {@link TargetLivingEvent#getTargetEntity()},
-     * is due to it losing its health.
-     */
-    interface Death extends DestructEntityEvent, TargetLivingEvent {}
+    protected final Map<String, TextElement> params = new HashMap<>();
+    protected TextTemplate template;
+
+    public SimpleTextTemplateApplier(TextTemplate template) {
+        this.template = template;
+    }
+
+    public SimpleTextTemplateApplier() {
+        this(TextTemplate.EMPTY);
+    }
+
+    @Override
+    public ImmutableMap<String, TextElement> getParameters() {
+        return ImmutableMap.copyOf(this.params);
+    }
+
+    @Override
+    public void setParameter(String key, TextElement value) {
+        this.params.put(key, value);
+    }
+
+    @Override
+    public TextTemplate getTemplate() {
+        return this.template;
+    }
+
+    @Override
+    public void setTemplate(TextTemplate template) {
+        this.template = template;
+    }
+
 }
