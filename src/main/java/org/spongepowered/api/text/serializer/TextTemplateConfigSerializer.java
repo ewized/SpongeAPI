@@ -67,6 +67,10 @@ public class TextTemplateConfigSerializer implements TypeSerializer<TextTemplate
     private static final String NODE_OPEN_ARG = "openArg";
     private static final String NODE_CLOSE_ARG = "closeArg";
 
+    private static final TypeToken<Text> TOKEN_TEXT = TypeToken.of(Text.class);
+    private static final TypeToken<Map<String, TextTemplate.Arg>> TOKEN_ARGS
+            = new TypeToken<Map<String, TextTemplate.Arg>>() {};
+
     @SuppressWarnings("NullableProblems") private ConfigurationNode root;
     @SuppressWarnings("NullableProblems") private String openArg;
     @SuppressWarnings("NullableProblems") private String closeArg;
@@ -86,8 +90,8 @@ public class TextTemplateConfigSerializer implements TypeSerializer<TextTemplate
     public void serialize(TypeToken<?> type, TextTemplate obj, ConfigurationNode value) throws ObjectMappingException {
         value.getNode(NODE_OPTIONS, NODE_OPEN_ARG).setValue(obj.getOpenArgString());
         value.getNode(NODE_OPTIONS, NODE_CLOSE_ARG).setValue(obj.getCloseArgString());
-        value.getNode(NODE_ARGS).setValue(new TypeToken<Map<String, TextTemplate.Arg>>() {}, obj.getArguments());
-        value.getNode(NODE_CONTENT).setValue(TypeToken.of(Text.class), obj.toText());
+        value.getNode(NODE_ARGS).setValue(TOKEN_ARGS, obj.getArguments());
+        value.getNode(NODE_CONTENT).setValue(TOKEN_TEXT, obj.toText());
     }
 
     private void parse(Text content, List<Object> into) throws ObjectMappingException {

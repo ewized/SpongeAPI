@@ -50,9 +50,39 @@ public interface TextFormatter<E extends TextRepresentable> extends TextRepresen
      * @param i Index to retrieve from
      * @return Element at index
      */
-    default E get(int i) {
-        return getAll().get(i);
-    }
+    E get(int i);
+
+    /**
+     * Replaces the element previously at the specified index with the
+     * specified element.
+     *
+     * @param i Index to replace
+     * @param e Element to replace with
+     * @return Element previously at index
+     */
+    E set(int i, E e);
+
+    /**
+     * Returns the amount of elements in this formatter.
+     *
+     * @return Amount of elements
+     */
+    int size();
+
+    /**
+     * Returns true if the formatter contains no elements.
+     *
+     * @return True if contains no elements
+     */
+    boolean isEmpty();
+
+    /**
+     * Returns true if the specified element is in the formatter.
+     *
+     * @param e Element to check
+     * @return True if in formatter
+     */
+    boolean contains(E e);
 
     /**
      * Clears all elements from this formatter.
