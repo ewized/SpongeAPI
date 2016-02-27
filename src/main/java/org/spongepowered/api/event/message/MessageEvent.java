@@ -233,11 +233,6 @@ public interface MessageEvent extends Event {
             partition.add(applier);
         }
 
-        @Override
-        public String toString() {
-            return "";
-        }
-
     }
 
     /**
