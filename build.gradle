@@ -32,10 +32,6 @@ sourceSets {
     }
 }
 
-repositories {
-    mavenLocal() // TODO
-}
-
 // Project dependencies
 dependencies {
     // Logging
